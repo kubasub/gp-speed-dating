@@ -77,6 +77,7 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         firstParent = -1;
     }
     
+    
     /**
      * Produces the index of a randomly chosen individual from the population.
      */
@@ -121,12 +122,19 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         }
         return bestCandidate;
     }
+    
+    private int tournament(final int subpopulation, final EvolutionState state, final int thread) {
+        TournamentSelection tournament = new TournamentSelection();
+        tournament.size = this.tournamentSize;
+        tournament.pickWorst = false;
+        return tournament.produce(subpopulation, state, thread);
+    }
 
     @Override
     public int produce(final int subpopulation, final EvolutionState state, final int thread) {
         int individual;
         if(!isParent1Set()) {
-            individual = tournamentSelect();
+            individual = tournament(subpopulation, state, thread);
             firstParent = individual;
         } else {
             int[] candidates = getIndividualsToDate(firstParent, subpopulation, state, thread);
