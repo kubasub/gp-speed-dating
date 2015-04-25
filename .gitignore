@@ -1,1 +1,5 @@
 build/
+nbproject/
+/dist/
+out.stat
+out2.stat
