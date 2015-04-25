@@ -2,7 +2,6 @@ package TestSuite;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
@@ -13,15 +12,15 @@ public class Averager {
 
   public static void average( String directory, TestCase test, boolean sizeIncluded ) {
     // Program Sizes
-    HashMap<Integer, HashMap<Integer, Double>> meanGenSize = new HashMap<>();
-    HashMap<Integer, HashMap<Integer, Double>> meanRunSize = new HashMap<>();
-    HashMap<Integer, HashMap<Integer, Double>> bestGenSize = new HashMap<>();
-    HashMap<Integer, HashMap<Integer, Double>> bestRunSize = new HashMap<>();
+    LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> meanGenSize = new LinkedHashMap<>();
+    LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> meanRunSize = new LinkedHashMap<>();
+    LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> bestGenSize = new LinkedHashMap<>();
+    LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> bestRunSize = new LinkedHashMap<>();
 
     // Individual fitness
-    HashMap<Integer, HashMap<Integer, Double>> meanGenPopulationFitness = new HashMap<>();
-    HashMap<Integer, HashMap<Integer, Double>> bestGenPopulationFitness = new HashMap<>();
-    HashMap<Integer, HashMap<Integer, Double>> bestRunPopulationFitness = new HashMap<>();
+    LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> meanGenPopulationFitness = new LinkedHashMap<>();
+    LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> bestGenPopulationFitness = new LinkedHashMap<>();
+    LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> bestRunPopulationFitness = new LinkedHashMap<>();
 
     // Read through each file and collect data
     File[] files = new File( directory ).listFiles();
@@ -38,29 +37,29 @@ public class Averager {
 
             // Make sure we have somewhere to put the values
             if ( !meanGenPopulationFitness.containsKey( genNumber ) ) {
-              meanGenPopulationFitness.put( genNumber, new HashMap<Integer, Double>() );
+              meanGenPopulationFitness.put( genNumber, new LinkedHashMap<Integer, Double>() );
             }
             if ( !bestGenPopulationFitness.containsKey( genNumber ) ) {
-              bestGenPopulationFitness.put( genNumber, new HashMap<Integer, Double>() );
+              bestGenPopulationFitness.put( genNumber, new LinkedHashMap<Integer, Double>() );
             }
             if ( !bestRunPopulationFitness.containsKey( genNumber ) ) {
-              bestRunPopulationFitness.put( genNumber, new HashMap<Integer, Double>() );
+              bestRunPopulationFitness.put( genNumber, new LinkedHashMap<Integer, Double>() );
             }
 
             // Handle program sizes when included
             if ( sizeIncluded ) {
               // Make sure we have somewhere to put the values
               if ( !meanGenSize.containsKey( genNumber ) ) {
-                meanGenSize.put( genNumber, new HashMap<Integer, Double>() );
+                meanGenSize.put( genNumber, new LinkedHashMap<Integer, Double>() );
               }
               if ( !meanRunSize.containsKey( genNumber ) ) {
-                meanRunSize.put( genNumber, new HashMap<Integer, Double>() );
+                meanRunSize.put( genNumber, new LinkedHashMap<Integer, Double>() );
               }
               if ( !bestGenSize.containsKey( genNumber ) ) {
-                bestGenSize.put( genNumber, new HashMap<Integer, Double>() );
+                bestGenSize.put( genNumber, new LinkedHashMap<Integer, Double>() );
               }
               if ( !bestRunSize.containsKey( genNumber ) ) {
-                bestRunSize.put( genNumber, new HashMap<Integer, Double>() );
+                bestRunSize.put( genNumber, new LinkedHashMap<Integer, Double>() );
               }
 
               // Save them
@@ -106,7 +105,7 @@ public class Averager {
     FileIO.saveAverages( averages, test, directory );
   }
 
-  private static double[] average( HashMap<Integer, HashMap<Integer, Double>> vals, int jobs ) {
+  private static double[] average( LinkedHashMap<Integer, LinkedHashMap<Integer, Double>> vals, int jobs ) {
     double[] averages = new double[ vals.size() ];
 
     HashMap<Integer, Double> lastValue = new HashMap<>();

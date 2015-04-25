@@ -24,9 +24,10 @@ public class TestCase {
     }
     else {
       return new String[]{ "-file", parameterFile, "-p", "jobs=" + runs,
-        "gp.koza.xover.source.0=ec.select.SpeedDateSelection",
-        "select.speed-date.tournament-size=7",
-        "select.speed-date.date-size=7"
+        "-p", "gp.koza.xover.source.0=ec.select.SpeedDateSelection",
+        "-p", "select.speed-date.tournament-size=7",
+        "-p", "select.speed-date.date-size=7",
+        "-p", "select.speed-date.match-type=ec.select.FitnessDate"
       };
     }
   }
