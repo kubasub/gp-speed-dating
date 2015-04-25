@@ -120,6 +120,8 @@ select.tournament.size = 7
 #
 select.speed-date.tournament-size = 3
 select.speed-date.date-size = 3
+# match-type 1: match based on fitness
+select.speed-date.match-type = 1
 
 
 # Since GROW is only used for subtree mutation, ECJ uses
