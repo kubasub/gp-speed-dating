@@ -81,17 +81,17 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
     /**
      * Produces the index of a randomly chosen individual from the population.
      */
-    private int getRandomIndividual(final int subpopulation, final EvolutionState state, final int thread) {
-        Individual[] oldinds = state.population.subpops[subpopulation].individuals;
-        return state.random[thread].nextInt(oldinds.length);
+    private int getRandomIndividual(int subpopulationSize, final EvolutionState state, final int thread) {
+        return state.random[thread].nextInt(subpopulationSize);
     }
     
     private int[] getIndividualsToDate(int parent1, final int subpopulation, final EvolutionState state, final int thread) {
         int [] candidates = new int[this.datingSize];
+        int subpopulationSize = state.population.subpops[subpopulation].individuals.length;
         for(int i=0; i < this.datingSize; i++) {            
             int potentialCand;
             do {
-                potentialCand = getRandomIndividual(subpopulation, state, thread);
+                potentialCand = getRandomIndividual(subpopulationSize, state, thread);
             } while (potentialCand == parent1);
             
             candidates[i] = potentialCand;
@@ -109,7 +109,7 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
     private int speedDate(int parent1, int[] candidates, final int subpopulation, final EvolutionState state) {
         Individual[] inds = state.population.subpops[subpopulation].individuals;
         
-        double bestScore = 999999999;
+        double bestScore = Double.MAX_VALUE;
         int bestCandidate = -1;
         
         for(int candidate : candidates) {
