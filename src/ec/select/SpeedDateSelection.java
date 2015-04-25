@@ -70,7 +70,7 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
     }
     
     private boolean isParent1Set() {
-        return firstParent == -1;
+        return firstParent != -1;
     }
     
     private void resetSpeedDate() {
