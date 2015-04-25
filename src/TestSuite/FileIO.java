@@ -38,13 +38,14 @@ public class FileIO {
     }
   }
 
-  public static void saveAverages( LinkedHashMap<String, double[]> averages, String directory ) {
+  public static void saveAverages( LinkedHashMap<String, double[]> averages, TestCase test, String directory ) {
     // Get setup information
     String[] keyArray = averages.keySet().toArray( new String[ averages.size() ] );
     int generations = averages.get( keyArray[0] ).length;
 
     // Create the file
-    File output = new File( directory + "\\averagedResults.csv" );
+    File dir = new File( directory );
+    File output = new File( directory + "\\" + dir.getName() + "averagedResults.csv" );
     try ( Writer writer = new BufferedWriter( new OutputStreamWriter(
             new FileOutputStream( output ), "utf-8" ) ) ) {
       writer.write( "Generation, " + join( keyArray ) );
@@ -73,8 +74,8 @@ public class FileIO {
         text.append( ", " );
       }
     }
-    
-    text.append( '\n');
+
+    text.append( '\n' );
 
     return text.toString();
   }
@@ -90,8 +91,8 @@ public class FileIO {
         text.append( ", " );
       }
     }
-    
-    text.append( '\n');
+
+    text.append( '\n' );
 
     return text.toString();
   }
