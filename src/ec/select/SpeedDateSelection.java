@@ -66,20 +66,13 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
     
     private Date setMatchType(EvolutionState state, Parameter base) {
         Parameter def = defaultBase();
-        int type = state.parameters.getInt(base.push(P_MATCH_TYPE), def.push(P_MATCH_TYPE), 1);
+        Date type = (Date)state.parameters.getInstanceForParameterEq(base.push(P_MATCH_TYPE), def.push(P_MATCH_TYPE), Date.class);
         
-        Date date;
-        switch(type) {
-            case 1:
-                date = new FitnessDate();
-                break;
-            default:
-                state.output.fatal("SpeedDating match type was not found.", base.push(P_MATCH_TYPE), def.push(P_MATCH_TYPE));
-                date = new FitnessDate();
-                break;
+        if (type == null) {
+            state.output.fatal("SpeedDating match type was not found.", base.push(P_MATCH_TYPE), def.push(P_MATCH_TYPE));
         }
         
-        return date;
+        return type;
     }
     
     public void setup(final EvolutionState state, final Parameter base) {
