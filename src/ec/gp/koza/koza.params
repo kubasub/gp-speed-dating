@@ -78,7 +78,7 @@ breed.reproduce.source.0 = ec.select.TournamentSelection
 
 # Crossover will use Tournament Selection, try only 1
 # time, have a max depth of 17, and use KozaNodeSelector
-gp.koza.xover.source.0 = ec.select.SpeedDateSelection
+gp.koza.xover.source.0 = ec.select.TournamentSelection
 gp.koza.xover.source.1 = same
 gp.koza.xover.ns.0 = ec.gp.koza.KozaNodeSelector
 gp.koza.xover.ns.1 = same
@@ -273,5 +273,7 @@ gp.nc.6.child.3 = nil
 gp.nc.6.child.4 = nil
 gp.nc.6.child.5 = nil
 
-
-
+stat.num-children = 1
+stat.child.0 = ec.simple.SimpleShortStatistics
+stat.child.0.file = $out2.stat
+stat.child.0.do-size = true
