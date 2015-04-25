@@ -118,7 +118,6 @@ select.tournament.size = 7
 #
 # SpeedDateSelection parameters
 #
-select.speed-date.pick-worst = false
 select.speed-date.tournament-size = 3
 select.speed-date.date-size = 3
 

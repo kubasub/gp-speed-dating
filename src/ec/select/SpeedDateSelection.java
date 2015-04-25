@@ -16,8 +16,6 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
     
     // Base namespace for this selection method
     public static final String P_SPEED_DATE = "speed-date";
-    // Boolean option to choose the parents that are least alike
-    public static final String P_PICKWORST = "pick-worst";
     // Number of candidates for tournament selection
     public static final String P_TOUR_SIZE = "tournament-size";
     // Number of candidates for speed dating
@@ -66,7 +64,6 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
 
         this.tournamentSize = loadTournamentSize(state, base);
         this.datingSize = loadDatingSize(state, base);
-        this.pickWorst = state.parameters.getBoolean(base.push(P_PICKWORST), defaultBase().push(P_PICKWORST), false);
     }
     
     private boolean isParent1Set() {
