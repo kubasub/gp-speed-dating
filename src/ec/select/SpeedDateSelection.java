@@ -23,6 +23,9 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
     // Number of candidates for speed dating
     public static final String P_DATE_SIZE = "date-size";
     
+    // Indicator whether the first parent has been determined
+    private static int firstParent = -1;
+    
     // Whether we match the first parent with the least alike date
     public boolean pickWorst;
     // Size for tournament selection
@@ -64,6 +67,14 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         this.tournamentSize = loadTournamentSize(state, base);
         this.datingSize = loadDatingSize(state, base);
         this.pickWorst = state.parameters.getBoolean(base.push(P_PICKWORST), defaultBase().push(P_PICKWORST), false);
+    }
+    
+    private boolean isParent1Set() {
+        return firstParent == -1;
+    }
+    
+    private void resetSpeedDate() {
+        firstParent = -1;
     }
     
     /**
@@ -114,13 +125,15 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
     @Override
     public int produce(final int subpopulation, final EvolutionState state, final int thread) {
         int individual;
-        if(!hasFirstParent) {
+        if(!isParent1Set()) {
             individual = tournamentSelect();
+            firstParent = individual;
         } else {
-            int[] candidates = getIndividualsToDate(subpopulation, state, thread);
-            individual = speedDate(parent1, candidates, subpopulation, state);
+            int[] candidates = getIndividualsToDate(firstParent, subpopulation, state, thread);
+            individual = speedDate(firstParent, candidates, subpopulation, state);
+            resetSpeedDate();
         }
-        return individual;        
+        return individual;
     }
     
     /**
