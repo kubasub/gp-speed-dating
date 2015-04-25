@@ -779,7 +779,5 @@ public class Evolve
               }
             */
             }
-//
-//        System.exit(0);
         }
     }

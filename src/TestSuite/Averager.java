@@ -11,7 +11,7 @@ public class Averager {
 
   private static final String statFileName = "out2";
 
-  public static void average( String directory, boolean sizeIncluded ) {
+  public static void average( String directory, TestCase test, boolean sizeIncluded ) {
     // Program Sizes
     HashMap<Integer, ArrayList<Double>> meanGenSize = new HashMap<>();
     HashMap<Integer, ArrayList<Double>> meanRunSize = new HashMap<>();
@@ -101,7 +101,7 @@ public class Averager {
     averages.put( "Best Fitness For Generation", average( bestGenPopulationFitness ) );
     averages.put( "Best Fitness For Run", average( bestRunPopulationFitness ) );
 
-    FileIO.saveAverages( averages, directory );
+    FileIO.saveAverages( averages,test, directory );
   }
 
   private static double[] average( HashMap<Integer, ArrayList<Double>> vals ) {

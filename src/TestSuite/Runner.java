@@ -14,10 +14,7 @@ public class Runner {
 
     // Run each test
     for ( TestCase test : tests ) {
-      Evolve.main( new String[]{
-        "-file",
-        test.parameterFile
-      } );
+      Evolve.main( test.getCommandLine() );
 
       // Get the current time and make a folder
       Calendar cal = Calendar.getInstance();
@@ -36,13 +33,34 @@ public class Runner {
       }
 
       // Finished test, process the data for charts etc
-      Averager.average( currentDirectory, true );
+      Averager.average( currentDirectory, test, true );
     }
   }
 
   private ArrayList<TestCase> getTestCases() {
     ArrayList<TestCase> tests = new ArrayList<>();
-    
+
+    tests.add( new TestCase(
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\SpeedDatingTests\\RegressionERC",
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\gp-speed-dating\\src\\ec\\app\\regression\\erc.params",
+            10,
+            false ) );
+    tests.add( new TestCase(
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\SpeedDatingTests\\RegressionERC",
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\gp-speed-dating\\src\\ec\\app\\regression\\erc.params",
+            10,
+            true ) );
+    tests.add( new TestCase(
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\SpeedDatingTests\\Ant",
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\gp-speed-dating\\src\\ec\\app\\ant\\ant.params",
+            10,
+            false ) );
+    tests.add( new TestCase(
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\SpeedDatingTests\\Ant",
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\gp-speed-dating\\src\\ec\\app\\ant\\ant.params",
+            10,
+            true ) );
+
     return tests;
   }
 
