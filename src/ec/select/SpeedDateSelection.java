@@ -20,6 +20,9 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
     public static final String P_TOUR_SIZE = "tournament-size";
     // Number of candidates for speed dating
     public static final String P_DATE_SIZE = "date-size";
+    // The factor on which we want to match the parents
+    public static final String P_MATCH_TYPE = "match-type";
+    
     
     // Indicator whether the first parent has been determined
     private static int firstParent = -1;
@@ -30,6 +33,8 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
     public int tournamentSize;
     // Size for speed dating
     public int datingSize;
+    // The type of matching being done
+    public Date date;
   
     
     @Override
@@ -59,11 +64,30 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         return size;
     }
     
+    private Date setMatchType(EvolutionState state, Parameter base) {
+        Parameter def = defaultBase();
+        int type = state.parameters.getInt(base.push(P_MATCH_TYPE), def.push(P_MATCH_TYPE), 1);
+        
+        Date date;
+        switch(type) {
+            case 1:
+                date = new FitnessDate();
+                break;
+            default:
+                state.output.fatal("SpeedDating match type was not found.", base.push(P_MATCH_TYPE), def.push(P_MATCH_TYPE));
+                date = new FitnessDate();
+                break;
+        }
+        
+        return date;
+    }
+    
     public void setup(final EvolutionState state, final Parameter base) {
         super.setup(state, base);
 
         this.tournamentSize = loadTournamentSize(state, base);
         this.datingSize = loadDatingSize(state, base);
+        this.date = setMatchType(state, base);
     }
     
     private boolean isParent1Set() {
@@ -96,13 +120,6 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         return candidates;
     }
     
-    /**
-     * Determines how similar the parents are in terms of fitness.
-     */
-    private double date(Individual first, Individual second) {
-        return Math.abs(first.fitness.fitness() - second.fitness.fitness());
-    }
-    
     private int speedDate(int parent1, int[] candidates, final int subpopulation, final EvolutionState state) {
         Individual[] inds = state.population.subpops[subpopulation].individuals;
         
@@ -110,7 +127,7 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         int bestCandidate = -1;
         
         for(int candidate : candidates) {
-            double score = date(inds[parent1], inds[candidate]);
+            double score = this.date.match(inds[parent1], inds[candidate]);
             if(score < bestScore) {
                 bestScore = score;
                 bestCandidate = candidate;
