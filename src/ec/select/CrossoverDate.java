@@ -18,9 +18,6 @@ public class CrossoverDate implements Date {
   @Override
   public double match( Individual first, Individual second, EvolutionState state ) {
     double offspringFitness = this.produce( first, second, state, 0 );
-    if ( offspringFitness > 1 ) {
-      System.out.println( "GREATER THAN 1: " + offspringFitness );
-    }
 
     return 1.0 - offspringFitness;
   }
@@ -61,14 +58,8 @@ public class CrossoverDate implements Date {
       boolean res1 = false;
       boolean res2 = false;
 
-      /**
-       * How the pipeline selects a node from individual 1
-       */
+      // How the pipeline selects a node from the individuals
       GPNodeSelector nodeselect1 = new KozaNodeSelector();
-
-      /**
-       * How the pipeline selects a node from individual 2
-       */
       GPNodeSelector nodeselect2 = new KozaNodeSelector();
 
       // prepare the nodeselectors

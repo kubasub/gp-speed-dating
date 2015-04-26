@@ -42,6 +42,12 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         return SelectDefaults.base().push(P_SPEED_DATE);
     }
     
+    /**
+     * A convenience method that gets the tournament size from the parameters
+     * database. It ensures that a valid value has been specified.
+     * 
+     * @return the tournament size for determining the first parent
+     */
     private int loadTournamentSize(final EvolutionState state, final Parameter base) {
         Parameter def = defaultBase();
         int size = state.parameters.getInt(base.push(P_TOUR_SIZE), def.push(P_TOUR_SIZE), 1);
@@ -53,6 +59,12 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         return size;
     }
     
+    /**
+     * A convenience method that gets the dating size from the parameters
+     * database. It ensures that a valid value has been specified.
+     * 
+     * @return the number of individuals the first parent will go on a date with
+     */
     private int loadDatingSize(final EvolutionState state, final Parameter base) {
         Parameter def = defaultBase();
         int size = state.parameters.getInt(base.push(P_DATE_SIZE), def.push(P_DATE_SIZE), 1);
@@ -64,6 +76,12 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         return size;
     }
     
+    /**
+     * A convenience method that gets dating method from the parameters
+     * database. It ensures that a valid class has been specified.
+     * 
+     * @return the dating method
+     */
     private Date setMatchType(EvolutionState state, Parameter base) {
         Parameter def = defaultBase();
         Date type = (Date)state.parameters.getInstanceForParameterEq(base.push(P_MATCH_TYPE), def.push(P_MATCH_TYPE), Date.class);
@@ -75,6 +93,10 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         return type;
     }
     
+    /**
+     * A constructor-type method that is used by ECJ. Loads the parameters
+     * relevant to the SpeedDateSelection.
+     */
     public void setup(final EvolutionState state, final Parameter base) {
         super.setup(state, base);
 
@@ -83,10 +105,17 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         this.date = setMatchType(state, base);
     }
     
+    /**
+     * Returns whether the first parent has been selected.
+     */
     private boolean isParent1Set() {
         return firstParent != -1;
     }
     
+    /**
+     * Resets this selection method to the point where the first parent has not
+     * been chosen.
+     */
     private void resetSpeedDate() {
         firstParent = -1;
     }
@@ -99,6 +128,13 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         return state.random[thread].nextInt(subpopulationSize);
     }
     
+    /**
+     * Gets a list of individuals that will be matched with the first parent
+     * from the subpopulation. Ensures that the first parent does not go on a
+     * date with itself.
+     * 
+     * @return a list of indexes, representing the individuals to be dated
+     */
     private int[] getIndividualsToDate(int parent1, final int subpopulation, final EvolutionState state, final int thread) {
         int [] candidates = new int[this.datingSize];
         int subpopulationSize = state.population.subpops[subpopulation].individuals.length;
@@ -113,6 +149,12 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         return candidates;
     }
     
+    /**
+     * Matches each candidate individual with the first in order to determine
+     * which candidate best matches the first parent.
+     * 
+     * @return the individual which best matched the first parent
+     */
     private int speedDate(int parent1, int[] candidates, final int subpopulation, final EvolutionState state) {
         Individual[] inds = state.population.subpops[subpopulation].individuals;
         
@@ -120,6 +162,7 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         int bestCandidate = -1;
         
         for(int candidate : candidates) {
+            // Get the score from the date
             double score = this.date.match(inds[parent1], inds[candidate], state);
             if(score < bestScore) {
                 bestScore = score;
@@ -130,13 +173,28 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         return bestCandidate;
     }
     
+    /**
+     * Performs a tournament selection to determine the first parent. This is
+     * effectively a wrapper for the TournameSelection class.
+     * 
+     * @return the index of the tournament-selected individual
+     */
     private int tournament(final int subpopulation, final EvolutionState state, final int thread) {
         TournamentSelection tournament = new TournamentSelection();
         tournament.size = this.tournamentSize;
         tournament.pickWorst = false;
         return tournament.produce(subpopulation, state, thread);
     }
-
+    
+    /**
+     * This method is the entry point for the speed-dating algorithm. The first
+     * time it is entered, the standard tournament selection is ran to get the
+     * first parent. The second time, a matching method is ran, comparing the
+     * first parent with potential candidate individuals. The the second parent
+     * for the crossover is the candidate which best matches the first parent.
+     * 
+     * @return a index of the individual to be used with crossover
+     */
     @Override
     public int produce(final int subpopulation, final EvolutionState state, final int thread) {
         int individual;
