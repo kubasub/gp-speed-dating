@@ -1,5 +1,6 @@
 package ec.select;
 
+import ec.EvolutionState;
 import ec.Individual;
 
 /**
@@ -16,5 +17,5 @@ public interface Date {
      * @param second the second person on the date
      * @return       how similar the two individuals are
      */
-    public double match(Individual first, Individual second);
+    public double match(Individual first, Individual second, EvolutionState state);
 }

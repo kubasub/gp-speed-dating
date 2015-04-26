@@ -5,6 +5,7 @@
  */
 package ec.select;
 
+import ec.EvolutionState;
 import ec.Individual;
 
 /**
@@ -14,8 +15,7 @@ import ec.Individual;
 public class FitnessDate implements Date {
 
     @Override
-    public double match(Individual first, Individual second) {
+    public double match(Individual first, Individual second, EvolutionState state) {
         return Math.abs(first.fitness.fitness() - second.fitness.fitness());
     }
-    
 }

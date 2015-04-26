@@ -120,7 +120,7 @@ public class SpeedDateSelection extends SelectionMethod implements SteadyStateBS
         int bestCandidate = -1;
         
         for(int candidate : candidates) {
-            double score = this.date.match(inds[parent1], inds[candidate]);
+            double score = this.date.match(inds[parent1], inds[candidate], state);
             if(score < bestScore) {
                 bestScore = score;
                 bestCandidate = candidate;

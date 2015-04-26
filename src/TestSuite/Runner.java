@@ -14,26 +14,30 @@ public class Runner {
 
     // Run each test
     for ( TestCase test : tests ) {
-      Evolve.main( test.getCommandLine() );
+      for ( int i = 0; i < 3; i++ ) {
+        Evolve.main( test.getCommandLine() );
 
-      // Get the current time and make a folder
-      Calendar cal = Calendar.getInstance();
-      cal.getTime();
-      SimpleDateFormat sdf = new SimpleDateFormat( "HH-mm-ss" );
-      String currentDirectory = test.outputFolder + "-" + sdf.format( cal.getTime() );
-      boolean success = ( new File( currentDirectory ) ).mkdirs();
-      if ( !success ) {
-        System.out.println( "Could not make folder: " + currentDirectory );
-        continue; // Try the next test
+        // Get the current time and make a folder
+        Calendar cal = Calendar.getInstance();
+        cal.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat( "HH-mm-ss" );
+        String currentDirectory = test.getOutputFolder() + "-" + sdf.format( cal.getTime() );
+        boolean success = ( new File( currentDirectory ) ).mkdirs();
+        if ( !success ) {
+          System.out.println( "Could not make folder: " + currentDirectory );
+          continue; // Try the next test
+        }
+
+        // Run each test and copy the output data
+        for ( int j = 0; j < test.runs; j++ ) {
+          copyStatFiles( j, currentDirectory );
+        }
+
+        // Finished test, process the data for charts etc
+        Averager.average( currentDirectory, test, true );
+
+        test.currentTest++;
       }
-
-      // Run each test and copy the output data
-      for ( int i = 0; i < test.runs; i++ ) {
-        copyStatFiles( i, currentDirectory );
-      }
-
-      // Finished test, process the data for charts etc
-      Averager.average( currentDirectory, test, true );
     }
   }
 
@@ -41,25 +45,17 @@ public class Runner {
     ArrayList<TestCase> tests = new ArrayList<>();
 
     tests.add( new TestCase(
-            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\SpeedDatingTests\\RegressionERC",
-            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\gp-speed-dating\\src\\ec\\app\\regression\\erc.params",
-            10,
-            false ) );
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\SpeedDatingTests\\RegressionSextic",
+            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\gp-speed-dating\\src\\ec\\app\\regression\\sexticerc.params",
+            10 ) );
     tests.add( new TestCase(
             "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\SpeedDatingTests\\RegressionERC",
             "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\gp-speed-dating\\src\\ec\\app\\regression\\erc.params",
-            10,
-            true ) );
+            10 ) );
     tests.add( new TestCase(
             "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\SpeedDatingTests\\Ant",
             "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\gp-speed-dating\\src\\ec\\app\\ant\\ant.params",
-            10,
-            false ) );
-    tests.add( new TestCase(
-            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\SpeedDatingTests\\Ant",
-            "C:\\Users\\42000\\Documents\\Brock\\Year 5\\COSC 4V82\\gp-speed-dating\\src\\ec\\app\\ant\\ant.params",
-            10,
-            true ) );
+            10 ) );
 
     return tests;
   }
