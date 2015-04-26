@@ -1,0 +1,349 @@
+\documentclass[titlepage,letterpaper]{article}
+ 
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{cite}
+\usepackage{caption}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{longtable}
+\usepackage[autostyle]{csquotes}
+\usepackage[titletoc,title]{appendix}
+ 
+\everymath{\displaystyle}
+\title{Genetic Programming \\ Speed Dating Selection Method}
+
+\author{Ryan Spring \\ 4778577 \\ \texttt{rs10pm@brocku.ca} \\ \\ Kuba Subczynski \\ 4706867 \\ \texttt{js10da@brocku.ca} 
+\\
+\\
+\\
+\\
+COSC 4V82 - Final Project
+\\
+\\ 
+\\
+\\}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+
+% TODO, idea and investigation abstract
+
+\end{abstract}
+ 
+ 
+\tableofcontents
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\label{sec:Introduction}
+
+%TODO idea, ECJ system, source of example problems etc
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experiment Details}
+\label{sec:ExperimentDetails}
+
+
+\subsection{GP Parameters}
+\label{sec:Parameters}
+
+%TODO koza's base parameters + specifics for each test
+
+%TODO update table
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4cm} | p{6cm} } 
+Parameter & Value \\\hline
+Population Size & 1024\\
+Max Generation Count & 501\\
+Training/Testing Cases & 400 positive \& 400 negative/262144\\
+Crossover Rate & 0.90\\
+Mutation Rate & 0.20\\
+Selection Method & Tournament\\
+Tournament Size & 7\\
+Elitism & Unused\\
+Population Initialization & Ramped Half \& Half (2..6)\\
+Input File & brodatz2x2.png \\
+\end{tabular}
+\caption{GP Parameters} 
+\label{tab:params}
+\end{table}
+
+\subsection{Selection Method}
+\label{sec:Selection}
+
+%TODO introduce idea of speed dating, have citations/quote about importance of selection
+
+\subsection{Parameter Format}
+\label{sec:Format}
+
+%TODO selection method params
+
+\begin{figure}[H]
+\centering
+\begin{quote}
+eval.problem.corner = 1\\
+eval.problem.file  = \textbackslash brodatz2x2.png
+\end{quote}
+\caption{\label{fig:sampleDataParams}Sample data file parameters}
+\end{figure}
+
+\subsection{Selection Implementation}
+\label{sec:Implementation}
+
+%TODO implementation details
+
+\subsection{Fitness Functions}
+\label{sec:Fitness}
+
+%TODO standard koza fitness, mention adjusted fitness
+
+%TODO update figure
+\begin{figure}[H]
+\[ standardFitness = 1 - (CorrectResults / TotalTests) \]
+\caption{Classification fitness function} 
+\label{fig:fitnessFunction}
+\end{figure}
+
+\begin{figure}[H]
+\[ adjustedFitness = \frac{1}{1 + standardFitness} \]
+\caption{Adjusted Fitness Value Returned by ECJ} 
+\label{fig:adjustedfitness}
+\end{figure}
+
+\subsection{GP Language}
+\label{sec:Language}
+
+%TODO not all of these are used for each test etc, maybe do a section for terminals of each
+
+\textbf{Terminals}
+\begin{description}
+\item [avg33] The value corresponding to the current \texttt{(x,y)} coordinates \texttt{3x3} average.
+\item [avg55] The value corresponding to the current \texttt{(x,y)} coordinates \texttt{5x5} average.
+\item [std33] The current \texttt{(x,y)} coordinates \texttt{3x3} standard deviation.
+\item [std55] The current \texttt{(x,y)} coordinates \texttt{5x5} standard deviation.
+\item [gaussian33] The \texttt{3x3} blurred value for the current \texttt{(x,y)} coordinate.
+\item [gaussian55] The \texttt{5x5} blurred value for the current \texttt{(x,y)} coordinate.
+\item [entropy33] The Shannon entropy for \texttt{3x3} area around the \texttt{(x,y)} coordinates.
+\item [entropy55] The Shannon entropy for \texttt{5x5} area around the \texttt{(x,y)} coordinates.\\
+\end{description}
+
+\textbf{Functions}
+\begin{description}
+\item [Add] Takes two sub trees and returns the sum of their evaluations.
+\item [Sub] Takes two sub trees and returns the difference of their evaluations.
+\item [Mul] Takes two sub trees, multiplies the values obtained by evaluating them, and returns the result.
+\item [Div] Takes two sub trees, divides the values obtained by evaluating them, and returns the result. If the value used as a denominator is \texttt{0.0} it returns \texttt{0.0} as a result.
+\item [Square] Takes a single sub tree and returns its result raised to the power of two.
+\item [Cube] Takes a single sub tree and returns its result raised to the power of three.
+\item [Exp] Takes a single sub tree and returns Euler's number e raised to the power of the sub tree value.
+\item [Log] Takes a single sub tree and returns the logarithmic value of its result. If the result is \texttt{0.0} the same value is returned. When necessary the absolute value of the result is used.
+\item [Inv] Takes a single sub tree and returns its result inverted. If the result is \texttt{0.0} the same value is returned.
+\item [Neg] Takes a single sub tree and returns the negative value of its result.
+\item [NegExp] Takes a single sub tree and returns Euler's number e raised to the power of zero minus the sub tree value.
+\item [Sqrt] Takes a single sub tree and returns the square root of its result.
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Test Problems}
+\label{sec:Problems}
+
+%TODO discuss ANT, regression etc
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4cm} | p{4cm} } 
+Experiment 1 & Experiment 2 \\\hline
+avg33 & avg55 \\
+avg55 & std55 \\
+std33 & modifiedGaussian55 \\
+std55 & entropy55 \\
+gausian33 & \\
+gausian55 & \\
+entropy33 & \\
+entropy55 & 
+\end{tabular}
+\caption{Function Sets for Experiments 1 and 2} 
+\label{tab:experimentAtable}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Date Variations}
+\label{sec:DateVariations}
+
+%TODO introduce other date methods
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results}
+\label{sec:Results}
+
+%TODO introduce the data that follows
+
+\subsection{Resulting Training Fitness}
+\label{sec:fitnessResults}
+
+%TODO replace with actual results
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l | c | c | c | c }
+\vtop{\hbox{\strut Corner}\hbox{\strut  }} & \vtop{\hbox{\strut End Generation}\hbox{\strut Avg. Fitness}} & \vtop{\hbox{\strut End Generation}\hbox{\strut Best Fitness}} & \vtop{\hbox{\strut Average Best}\hbox{\strut Fitness}} & \vtop{\hbox{\strut Average Best}\hbox{\strut Generation}} \\\hline
+0 & 78\% & 81\% & 81\% & 501 \\
+1 & 91\% & 94\% & 94\% & 501 \\
+2 & 82\% & 85\% & 85\% & 496 \\
+3 & 82\% & 84\% & 84\% & 501 \\\hline
+Average & 83\% & 86\% & 86\% & 499
+\end{tabular}
+\caption{Results for the first function set} 
+\label{tab:functionSet1Comparisson}
+\end{table}
+
+\begin{figure}[H]
+\centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{charts/test1Corner0Fitness.png}
+    \caption{Top left corner (corner 0)}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{charts/test1Corner1Fitness.png}
+    \caption{Top right corner (corner 1)}
+  \end{subfigure}
+\caption{Fitness results for the first function set}
+\label{fig:functionSet1FitnessCharts}
+\end{figure}
+
+
+\subsection{Resulting Program Sizes}
+\label{sec:resultTreeSizes}
+
+%TODO replace with actual results
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l | c | c | c | c }
+\vtop{\hbox{\strut Corner}\hbox{\strut }} & \vtop{\hbox{\strut End Run}\hbox{\strut Average Size}} & \vtop{\hbox{\strut End Generation}\hbox{\strut Average Size}} & \vtop{\hbox{\strut End Generation}\hbox{\strut Best Size}} & \vtop{\hbox{\strut End Run}\hbox{\strut Best Size}} \\\hline
+0 & 407.8 & 282.9 & 418.3 & 405.8 \\
+1 & 342.2 & 255 & 366.9 & 332.4 \\
+2 & 296.7 & 221.8 & 312.6 & 291.6 \\
+3 & 332.5 & 240.8 & 345.6 & 333.8 \\\hline
+Average	& 344.8	& 250.1 & 360.9 & 340.9
+\end{tabular}
+\caption{Program sizes for the first function set} 
+\label{tab:treeComparisson1}
+\end{table}
+
+\begin{figure}[H]
+\centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{charts/test1Corner0Size.png}
+    \caption{Top left corner (corner 0)}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=1\linewidth]{charts/test1Corner1Size.png}
+    \caption{Top right corner (corner 1)}
+  \end{subfigure}
+\caption{Program size results for the first function set}
+\label{fig:functionSet1SizeCharts}
+\end{figure}
+
+\subsection{Confusion Matrices} 
+\label{sec:confusionMatrix}
+
+%TODO put confusion matrices if it makes sense
+
+\subsection{Resulting Programs}
+\label{sec:resultprogramsB}
+
+%TODO maybe put programs
+
+\subsection{Date Variation Results}
+\label{sec:VariationResults}
+
+%TODO introduce results for variation
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l | c | c | c | c }
+\vtop{\hbox{\strut Corner}\hbox{\strut  }} & \vtop{\hbox{\strut End Generation}\hbox{\strut Avg. Fitness}} & \vtop{\hbox{\strut End Generation}\hbox{\strut Best Fitness}} & \vtop{\hbox{\strut Average Best}\hbox{\strut Fitness}} & \vtop{\hbox{\strut Average Best}\hbox{\strut Generation}} \\\hline
+0 & 92\% & 96\% & 96\% & 493 \\
+1 & 96\% & 99\% & 99\% & 492 \\
+2 & 88\% & 90\% & 90\% & 484 \\
+3 & 92\% & 95\% & 95\% & 478 \\\hline
+Average & 92\% & 95\% & 95\% & 487
+\end{tabular}
+\caption{Results for the first function set} 
+\label{tab:imageVariationComparisson}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l | c | c | c | c }
+\vtop{\hbox{\strut Corner}\hbox{\strut }} & \vtop{\hbox{\strut End Run}\hbox{\strut Average Size}} & \vtop{\hbox{\strut End Generation}\hbox{\strut Average Size}} & \vtop{\hbox{\strut End Generation}\hbox{\strut Best Size}} & \vtop{\hbox{\strut End Run}\hbox{\strut Best Size}} \\\hline
+0 & 299.4 & 215.9 & 307.9 & 278.9 \\
+1 & 307.5 & 240.1 & 309.6 & 252.7 \\ 
+2 & 332.6 & 224.9 & 352.3 & 323.1 \\ 
+3 & 345.4 & 243.1 & 355.7 & 311.7 \\\hline
+Average & 321.2 & 231.0 & 331.4 & 291.6
+\end{tabular}
+\caption{Program sizes for the first function set} 
+\label{tab:imageVariatonTreeComparison}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion}
+\label{sec:Discussion}
+
+\subsection{End Results}
+\label{sec:endresult}
+
+%TODO summary of how it worked
+
+\subsection{Training Effectiveness}
+\label{sec:trainingeffectiveness}
+To improve future results for the problem of texture classification the training process needs to be examined. It is clearly evident that convergence begins early in the run after examining Figures (\ref{fig:functionSet1FitnessCharts}) and (\ref{fig:functionSet2FitnessCharts}). Convergence is a very common topic in machine learning and search algorithms and in this specific case is the process of each individual in the population becoming closer to an identical copy of each other\cite{langdon:fogp}, or in other words producing programs that provide the same output. The charts clearly show that very little improvement occurs after approximately generation 50 which implies that the remaining 450 generations did very little successful work. Because of this a large portion of the run could be considered unnecessary unless improvements were made to promote innovation and genetic diversity.
+
+\subsection{Program Bloat}
+\label{sec:bloat}
+As evidenced by the charts in section (\ref{sec:resultTreeSizes}) program size continued to grow throughout each run. When compared to the fitness of the population it is clear that they do not follow the same trend which implies that the increase in program size was due to bloat. This is not necessarily unexpected since there was no specific tree depth specified, and as a result the system would continue to crossover sub-trees in an attempt to find better solutions. Program bloat was also evident while running the system as each run took a very significant amount of time to complete after the first few generations. If program bloat was reduced the system would be more effective during crossover because it would be more likely to select useful code, and would also speed up the run time of the entire GP system.
+
+
+\subsection{Final Programs}
+\label{sec:programDiscussion}
+The final programs seen in Appendix sections (\ref{App:bestProgramsTest1}) and (\ref{App:bestProgramsTest2}) which correspond to the results presented in sections (\ref{sec:imageMaps}) and (\ref{sec:confusionMatrix}) clearly demonstrate the bloat mentioned in the previous section. All 8 programs are extremely large for such a simple task and are full of operations that have very minor effects on the final output. By examining the programs it is notable that the system found the \texttt{5x5} filters more useful and as such they are more present in the output programs.
+
+\subsection{Date Variation}
+\label{sec:variationDiscussion}
+The results from testing the GP system with a second set of images were very promising and inline with the results from the initial set of textures. A very high percentage of successful classifications was obtained which suggests that the system is well rounded and would be able to effectively classify other textures. The results also demonstrated that large program sizes were still found which signifies that bloat was not an issue specific to the training data used for the first set of experiments.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+\label{sec:Conclusion}
+
+%TODO
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Future Work}
+\label{sec:FutureWork}
+
+%TODO
+
+\bibliography{biblio}{}
+\bibliographystyle{plain}
+
+\end{document}
